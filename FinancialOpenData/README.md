@@ -31,7 +31,7 @@ https://goodinfo.tw/StockInfo/StockList.asp
 ##### 2.1 讀取 data 教學 : 
 ```sh
 SP = StockPrice()
-data = SP.load('2330')# 2300 is stock id
+data = SP.load('2330')# 2330 is stock id
 ```
 ##### 2.2 變數介紹
 
@@ -55,7 +55,7 @@ fix_yahoo_finance
 ##### 3.1 讀取 data 教學 : 
 ```sh
 FS = FinancialStatements()
-data = FS.load('2330')# 2300 is stock id
+data = FS.load('2330')# 2330 is stock id
 ```
 ##### 3.2 變數介紹
 
