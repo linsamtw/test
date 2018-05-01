@@ -14,8 +14,8 @@ password = '123'
 
 #---------------------------------------------------------
 ''' test
-self = FinancialStatements()
-data = self.load('2330')
+FS = FinancialStatements()
+data = FS.load('2330')
 
 '''
 def execute_sql2(host,user,password,database,sql_text):
@@ -105,8 +105,8 @@ class FinancialStatements:
 
 #-------------------------------------------------------------
 ''' test
-self = StockPrice()
-data = self.load('2330')
+SP = StockPrice()
+data = SP.load('2330')
 
 '''
 class StockPrice(FinancialStatements):
@@ -172,8 +172,8 @@ class StockPrice(FinancialStatements):
 
 #--------------------------------------------------------------- 
 ''' test
-self = StockInfo()
-data = self.load()
+SI = StockInfo()
+data = SI.load()
 
 '''
 class StockInfo(FinancialStatements):
