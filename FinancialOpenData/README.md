@@ -2,8 +2,8 @@
 ## Financial Open Data
 ### 目前現有 data 如下
 ------------------------------------------------------------
-1. history taiwan stock prices ( 台股歷史股價 )
-1.1 變數介紹
+#### 1. history taiwan stock prices ( 台股歷史股價 )
+     1.1 變數介紹
 
 | variable name | 變數名稱 | example |
 |---------------|---------|----------|
