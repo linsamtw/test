@@ -171,4 +171,39 @@ class StockPrice(FinancialStatements):
         return data
 
 #--------------------------------------------------------------- 
+''' test
+self = StockInfo()
+data = self.load()
+
+'''
+class StockInfo(FinancialStatements):
+    #---------------------------------------------------------------    
+    def load(self):                        
+        
+        self.get_col_name('Financial_DataSet','StockInfo')
+        #---------------------------------------------------------------   
+        data = pd.DataFrame()
+        for j in range(len(self.col_name)):
+            print(j)
+            col = self.col_name[j]
+            text = 'select ' + col + ' from ' + '`StockInfo`'
+            
+            tem = execute_sql2(
+                host = host,
+                user = user,
+                password = password,
+                database = 'Financial_DataSet',
+                sql_text = text)
+            
+            if col=='Date':
+                tem = [np.datetime64(x[0]) for x in tem]
+                tem = pd.DataFrame(tem)
+                data[col] = tem.loc[:,0]
+            else:
+                tem = np.concatenate(tem, axis=0)
+                tem = pd.DataFrame(tem)
+                data[col] = tem.T.iloc[0]
+        return data
+    
+
 
