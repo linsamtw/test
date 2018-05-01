@@ -1,5 +1,10 @@
 
 ## Financial Open Data
+
+平台網址：http://114.34.138.146/phpmyadmin/ <br>
+user : guest <br>
+password : 123 <br>
+
 ### 目前現有 data 如下
 
 請先下載
