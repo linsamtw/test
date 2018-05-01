@@ -28,12 +28,12 @@ https://goodinfo.tw/StockInfo/StockList.asp
 
 ------------------------------------------------------------
 #### 2. history taiwan stock prices ( 台股歷史股價 )
-##### 1.1 讀取 data 教學 : 
+##### 2.1 讀取 data 教學 : 
 ```sh
 SP = StockPrice()
 data = SP.load('2330')# 2300 is stock id
 ```
-##### 1.2 變數介紹
+##### 2.2 變數介紹
 
 | variable name | 變數名稱 | example |
 |---------------|---------|----------|
@@ -52,12 +52,12 @@ fix_yahoo_finance
 
 ------------------------------------------------------------
 #### 3. history taiwan stock Financial Statements ( 台股歷史財報 )
-##### 1.1 讀取 data 教學 : 
+##### 3.1 讀取 data 教學 : 
 ```sh
 FS = FinancialStatements()
 data = FS.load('2330')# 2300 is stock id
 ```
-##### 1.2 變數介紹
+##### 3.2 變數介紹
 
 | variable name | 變數名稱 | example (單位: 仟元) |
 |---------------|---------|----------|
