@@ -3,7 +3,7 @@
 ### 目前現有 data 如下
 
 請先下載
-[ load_data.py ](https://github.com/f496328mm/FinancialMining/blob/master/FinancialOpenData/load_data.py) 
+[ load_data.py ](https://github.com/f496328mm/FinancialMining/blob/master/FinancialOpenData/load_data.py) <br>
 ps : 可藉由 stock_id, data 進行資料合併
 
 
