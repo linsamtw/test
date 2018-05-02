@@ -13,11 +13,7 @@ user = 'guest'
 password = '123'
 
 #---------------------------------------------------------
-''' test
-FS = FinancialStatements()
-data = FS.load('2330')
 
-'''
 def execute_sql2(host,user,password,database,sql_text):
     
     conn = ( pymysql.connect(host = host,# SQL IP
@@ -35,6 +31,12 @@ def execute_sql2(host,user,password,database,sql_text):
 
     return data
 #---------------------------------------------------------
+''' test
+FS = FinancialStatements()
+data = FS.load('2330')
+data = FS.load_all()
+
+'''    
 class FinancialStatements:
     def __init__(self):
         tem = execute_sql2(
@@ -102,7 +104,35 @@ class FinancialStatements:
                 data[col] = tem.T.iloc[0]
                 
         return data
+    
+    def load_all(self):
+        
+        self.get_col_name('Financial_DataSet','FinancialStatements')
 
+        data = pd.DataFrame()
+        for j in range(len(self.col_name)):
+            print(j)
+            col = self.col_name[j]
+            text = 'select ' + col + ' from ' + 'FinancialStatements'
+
+            tem = execute_sql2(
+                host = host,
+                user = user,
+                password = password,
+                database = 'Financial_DataSet',
+                sql_text = text)
+            
+            if col=='Date':
+                tem = [np.datetime64(x[0]) for x in tem]
+                tem = pd.DataFrame(tem)
+                data[col] = tem.loc[:,0]
+            else:
+                tem = np.concatenate(tem, axis=0)
+                tem = pd.DataFrame(tem)
+                data[col] = tem.T.iloc[0]
+                
+        return data
+        
 #-------------------------------------------------------------
 ''' test
 SP = StockPrice()
@@ -169,6 +199,7 @@ class StockPrice(FinancialStatements):
                 data[col] = tem
                 
         return data
+    
 
 #--------------------------------------------------------------- 
 ''' test
