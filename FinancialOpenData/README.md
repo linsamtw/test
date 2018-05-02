@@ -81,7 +81,7 @@ data = FS.load('2330')# 2330 is stock id
 |REV (Gross Revenue)|營業收入|4431220|
 |TAX (Income Tax Expense)|所得稅費用|435000|
 |stock_id|股票代號|1101|
-|year|年|86|
+|year|年|1997|
 |quar|季|4|
 |url|資料來源|https://stock.wearn.com/Income_detial.asp?kind=1101&y=8604|
 
