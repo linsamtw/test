@@ -4,12 +4,17 @@
      1.1.1 Crawler history Taiwan stocks prices. (100%)
      1.1.2 Auto crawler new taiwan stocks prices. (100%)
      1.1.3 讀取範例 (100%)
-     
+     1.1.4 S&P 500指數，並爬取該 500 家股票股價 ->>>
+     
 #### 1.2 各國匯率 
      1.2.1 以美元為基準，對於未來其他金融 data ，較容易進行轉換。
 #### 1.3 國際油價
 #### 1.4 央行利率
 #### 1.5 債券價格
+     1.5.1 G7 country ( 美國、加拿大、英國、法國、德國、義大利及日本 )->>>
+     1.5.2 data from https://data.oecd.org/interest/short-term-interest-rates.htm
+     1.5.3 data from https://www.investing.com/rates-bonds/
+     
 #### 1.6 財報( 包含季營收/月營收/殖利率/配息配股/配股時間 )
      1.6.1 台股歷年財報 (100%) 
      1.6.2 讀取範例 (100%)
