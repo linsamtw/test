@@ -14,6 +14,7 @@
      1.5.1 G7 country ( 美國、加拿大、英國、法國、德國、義大利及日本 )->>>
      1.5.2 data from https://data.oecd.org/interest/short-term-interest-rates.htm
      1.5.3 data from https://www.investing.com/rates-bonds/
+     1.5.4 data from G7 central bank
      
 #### 1.6 財報( 包含季營收/月營收/殖利率/配息配股/配股時間 )
      1.6.1 台股歷年財報 (100%) 
