@@ -61,7 +61,8 @@ fix_yahoo_finance
 ##### 3.1 讀取 data 教學 : 
 ```sh
 FS = FinancialStatements()
-data = FS.load('2330')# 2330 is stock id
+data = FS.load('2330')# 讀取 2330 歷史財報
+data = FS.load_all(')# 讀取 '所有股票' 歷史財報
 ```
 ##### 3.2 變數介紹 --- 1667 檔股票 ( 部分股票無財報 )，88,916 筆 data
 
