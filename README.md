@@ -3,7 +3,7 @@
 #### 1.1 股票股價
      1.1.1 Crawler history Taiwan stocks prices. (100%)
      1.1.2 Auto crawler new taiwan stocks prices. (100%)
-     1.1.3 讀取範例 (100%)
+     1.1.3 讀取範例 (100%)
      
 #### 1.2 各國匯率 
      1.2.1 以美元為基準，對於未來其他金融 data ，較容易進行轉換。
