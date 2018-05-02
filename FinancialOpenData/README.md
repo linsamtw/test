@@ -14,13 +14,13 @@ ps : 可藉由 stock_id, data 進行資料合併
 
 
 ------------------------------------------------------------
-#### 1. 台股股票一般資訊( 代號、名稱、產業 )
+#### 1. 台股股票一般資訊( 代號、名稱、產業 ) 
 ##### 1.1 讀取 data 教學 : 
 ```sh
 SI = StockInfo()
 data = SI.load()
 ```
-##### 1.2 變數介紹
+##### 1.2 變數介紹 --- 1815 檔股票
 
 | variable name | 變數名稱 | example |
 |---------------|---------|----------|
@@ -39,7 +39,7 @@ https://goodinfo.tw/StockInfo/StockList.asp
 SP = StockPrice()
 data = SP.load('2330')# 2330 is stock id
 ```
-##### 2.2 變數介紹
+##### 2.2 變數介紹 --- 1815 檔股票，460萬筆 data， data size is 371 MB
 
 | variable name | 變數名稱 | example |
 |---------------|---------|----------|
@@ -63,7 +63,7 @@ fix_yahoo_finance
 FS = FinancialStatements()
 data = FS.load('2330')# 2330 is stock id
 ```
-##### 3.2 變數介紹
+##### 3.2 變數介紹 --- 1667 檔股票 ( 部分股票無財報 )，88,916 筆 data
 
 | variable name | 變數名稱 | example (單位: 仟元) |
 |---------------|---------|----------|
