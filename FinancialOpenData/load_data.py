@@ -25,16 +25,19 @@ def execute_sql2(host,user,password,database,sql_text):
                              
     cursor = conn.cursor()    
     # sql_text = "SELECT * FROM `_0050_TW` ORDER BY `Date` DESC LIMIT 1"
-    cursor.execute(sql_text)
-    data = cursor.fetchall()
-    conn.close()
-
-    return data
+    try:   
+        cursor.execute(sql_text)
+        data = cursor.fetchall()
+        conn.close()
+        return data
+    except:
+        conn.close()
+        return ''
 #---------------------------------------------------------
 ''' test
 FS = FinancialStatements()
-data = FS.load('2330')
-data = FS.load_all()
+data = FS.load('2330')# 讀取 2330 歷史財報
+data = FS.load_all()# 讀取 '所有股票' 歷史財報
 
 '''    
 class FinancialStatements:
