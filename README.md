@@ -1,4 +1,4 @@
-## Outline 
+## Financial Mining Outline 
 ##### Financial Open Data ( Development )
 ##### Financial Visualize ( Development )
 ##### Financial Predict ( Development )
