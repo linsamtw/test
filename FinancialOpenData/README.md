@@ -6,7 +6,7 @@ user : guest <br>
 password : 123 <br>
 
 ------------------------------------------------------------
-### 目前現有 data 如下
+#### 目前現有 data 如下
 
 請先下載
 [ load_data.py ](https://github.com/f496328mm/FinancialMining/blob/master/FinancialOpenData/load_data.py) <br>
@@ -14,7 +14,7 @@ ps : 可藉由 stock_id, data 進行資料合併
 
 
 ------------------------------------------------------------
-### 1. 台股股票一般資訊( 代號、名稱、產業 ) 
+## 1. 台股股票一般資訊( 代號、名稱、產業 ) 
 ##### 1.1 讀取 data 教學 : 
 ```sh
 SI = StockInfo()
@@ -33,7 +33,7 @@ data = SI.load()# 讀取台股 '所有股票' 資訊
 https://goodinfo.tw/StockInfo/StockList.asp
 
 ------------------------------------------------------------
-### 2. history taiwan stock prices ( 台股歷史股價 )
+## 2. history taiwan stock prices ( 台股歷史股價 )
 ##### 2.1 讀取 data 教學 : 
 ```sh
 SP = StockPrice()
@@ -57,7 +57,7 @@ data = SP.load('2330')# 讀取 2330 歷史股價
 fix_yahoo_finance
 
 ------------------------------------------------------------
-### 3. history taiwan stock Financial Statements ( 台股歷史財報 )
+## 3. history taiwan stock Financial Statements ( 台股歷史財報 )
 ##### 3.1 讀取 data 教學 : 
 ```sh
 FS = FinancialStatements()
