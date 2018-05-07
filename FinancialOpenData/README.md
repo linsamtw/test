@@ -66,7 +66,7 @@ data = FS.load_all(')# 讀取台股 '所有股票' 歷史財報
 ```
 ##### 3.2 變數介紹 --- 1667 檔股票 ( 部分股票無財報 )，88,916 筆 data
 
-| variable name | 變數名稱 | example (單位: 仟元) |
+| variable name | 變數名稱 | example (單位: 仟元/thousand) |
 |---------------|---------|----------|
 | BTAXM (Income before Tax Margin) | 稅前純益 | 0.1602 |
 | COST (Cost of Goods Sold or Manufacturing)|營業成本|3963330|
@@ -90,6 +90,29 @@ data = FS.load_all(')# 讀取台股 '所有股票' 歷史財報
 https://stock.wearn.com/Income.asp <br>
 http://www.tedc.org.tw/tedc/bank/otccomp/ch1.3.4.htm
 
+------------------------------------------------------------
+## 4. history taiwan stock Stock Dividend ( 台股歷史配股資訊 )
+##### 4.1 讀取 data 教學 : 
+```sh
+SD = StockDividend()
+data = SD.load('2330')# 讀取 2330 歷史配股資訊
+```
+##### 4.2 變數介紹 --- 1815 檔股票，25,330 筆 data
 
+| variable name | 變數名稱 | example (單位: 仟元/thousand) |
+|---------------|---------|----------|
+|Shareholders meeting date|股東會日期|2010-06-15|
+|Retained_Earnings |盈餘配股(元/股)|0|
+|Capital_Reserve|公積配股(元/股)|0|
+|Ex_right_trading_day|除權交易日|None|
+|total employee bonus stock shares|員工配股(總張數)|0|
+|Cash dividend|現金股利|3|
+|Ex-dividend transaction day|除息交易日|2010-07-06|
+|total employee bonus shares|員工紅利(總金額)(仟元)|6.69134e+06|
+|Directors remuneration|董監酬勞 (仟元)|67692|
+|stock_id|股票代號|2330|
+
+資料來源 : <br>
+https://stock.wearn.com/dividend.asp
 
 
