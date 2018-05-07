@@ -229,7 +229,7 @@ class StockDividend(LoadDate):
         
         
 #--------------------------------------------------------------- 
-''' test StockDividend
+''' test InstitutionalInvestors
 II = InstitutionalInvestors()
 data = II.load()
 
