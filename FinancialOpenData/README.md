@@ -12,6 +12,7 @@ password : 123 <br>
 2. history taiwan stock prices ( 台股歷史股價 )<br>
 3. history taiwan stock Financial Statements ( 台股歷史財報 )<br>
 4. history taiwan stock Stock Dividend ( 台股歷史配股 )<br>
+5. history taiwan stock Institutional Investors buy and sell ( 台股歷史外資買賣 )<br>
 
 請先下載
 [ load_data.py ](https://github.com/f496328mm/FinancialMining/blob/master/FinancialOpenData/load_data.py) <br>
@@ -119,5 +120,34 @@ data = SD.load('2330')# 讀取 2330 歷史配股資訊
 
 資料來源 : <br>
 https://stock.wearn.com/dividend.asp
+
+------------------------------------------------------------
+## 5. history taiwan stock Institutional Investors buy and sell ( 台股歷史外資買賣 )
+##### 5.1 讀取 data 教學 : 
+```sh
+II = InstitutionalInvestors()
+data = II.load()
+```
+##### 5.2 變數介紹 --- 1815 檔股票，25,330 筆 data
+
+| variable name | 變數名稱 | example (單位: 億元/hundred million) |
+|---------------|---------|----------|
+|Dealer_buy|自營商 買進金額|62.63|
+|Dealer_sell |自營商 賣出金額|75.16|
+|Dealer_difference|自營商 買賣差額|-12.52|
+|Investment_Trust_buy|投信 買進金額|8.97|
+|Investment_Trust_sell|投信 賣出金額|8.4|
+|Investment_Trust_difference|投信 買賣差額|0.57|
+|Foreign_Investor_buy|外資 買進金額|244.37|
+|Foreign_Investor_sell|外資 賣出金額|169.216|
+|Foreign_Investor_difference|外資 買賣差額|75.16|
+|total_buy|合計 買進金額|315.97|
+|total_sell|合計 賣出金額|252.77|
+|total_difference|合計 買賣差額|63.2|
+|date|交易日期|2016-02-25|
+
+資料來源 : <br>
+https://stock.wearn.com/fundthree.asp?mode=search
+
 
 
