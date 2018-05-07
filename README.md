@@ -12,8 +12,9 @@
      1.1.1 Crawler history Taiwan stocks prices. (100%)
      1.1.2 Auto crawler new taiwan stocks prices. (100%)
      1.1.3 讀取範例 (100%)
-     1.1.4 三大法人(外資) 買賣歷史金額 ->>>
-     1.1.5 S&P 500指數，並爬取該 500 家股票股價 ->>>
+     1.1.4 三大法人(外資) 買賣歷史金額 (100%)
+     1.1.5 Auto crawler new taiwan stocks Institutional Investors buy and sell. ->>>
+     1.1.6 S&P 500指數，並爬取該 500 家股票股價 ->>>
 #### 1.2 各國匯率 
      1.2.1 以美元為基準，對於未來其他金融 data ，較容易進行轉換。
 #### 1.3 國際油價
