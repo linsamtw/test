@@ -30,7 +30,6 @@
      1.6.2 台股歷史配股 & 讀取範例 (100%)
      1.6.3 每個月自動爬取最新財報 ->>>
      1.6.4 每個月自動爬取最新配股 ->>>
-     1.6.5 殖利率/配息配股/配股時間 ->>> data from https://stock.wearn.com/dividend.asp
 #### 1.7 other 
      1.7.1 Output Gap (產出缺口)
      1.7.2 Inflation (通貨膨脹)
