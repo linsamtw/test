@@ -128,7 +128,7 @@ https://stock.wearn.com/dividend.asp
 II = InstitutionalInvestors()
 data = II.load()
 ```
-##### 5.2 變數介紹 --- 1815 檔股票，25,330 筆 data
+##### 5.2 變數介紹 --- 2004-01-02 ~ now
 
 | variable name | 變數名稱 | example (單位: 億元/hundred million) |
 |---------------|---------|----------|
