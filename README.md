@@ -39,7 +39,7 @@
      1.7.7 房地產價格
 
 ### 2. Load Data example
-(click)[https://github.com/f496328mm/FinancialMining/tree/master/FinancialOpenData]
+[click](https://github.com/f496328mm/FinancialMining/tree/master/FinancialOpenData)
 -------------------------------------------------------------------------------------------------
 
 ## Financial Visualize
