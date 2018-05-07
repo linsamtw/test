@@ -9,7 +9,7 @@
 
 ### 1.Financial Crawler
 #### 1.1 股票股價
-     1.1.1 台股歷史股價 Crawler history Taiwan stocks prices. (100%)
+     1.1.1 台股歷史股價 Crawler history Taiwan stocks prices. (100%)
      1.1.2 自動更新台股股價 Auto crawler new taiwan stocks prices. (100%)
      1.1.3 [讀取範例 Load data example](https://github.com/f496328mm/FinancialMining/blob/master/FinancialOpenData/load_data.py) (100%)
      1.1.4 三大法人(外資) 歷史買賣 history taiwan stock Institutional Investors buy and sell (100%)
