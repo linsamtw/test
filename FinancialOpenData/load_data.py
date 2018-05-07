@@ -117,27 +117,27 @@ class LoadDate:
                 
         return data
     
-''' test FinancialStatements
+#--------------------------------------------------------------- 
+''' test StockInfo
+SI = StockInfo()
+data = SI.load()
 
-FS = FinancialStatements()  
-data = FS.load('2330')# 讀取 2330 歷史財報
-data = FS.load_all()# 讀取 '所有股票' 歷史財報
-
-'''    
-        
-class FinancialStatements(LoadDate):
+'''
+class StockInfo(LoadDate):
     def __init__(self):
-        super(FinancialStatements, self).__init__(
+        super(StockInfo, self).__init__(
                 database = 'Financial_DataSet',
                 data_name = 'FinancialStatements')
+        self.data_name = 'StockInfo'
         
-    def load_all(self):
-        
+    def load(self):                        
         self.get_col_name()
+        #---------------------------------------------------------------   
+        self.data = pd.DataFrame()
         self.data = self.get_data(all_data='T')
-
+                
         return self.data
-        
+    
 #-------------------------------------------------------------
 ''' test StockPrice
 
@@ -190,33 +190,34 @@ class StockPrice(LoadDate):
             text = 'select ' + col + ' from ' + self.data_name
             self.execute2sql(text,col)
                 
-        return self.data
-    
+        return self.data    
 #--------------------------------------------------------------- 
-''' test StockInfo
-SI = StockInfo()
-data = SI.load()
+''' test FinancialStatements
 
-'''
-class StockInfo(LoadDate):
+FS = FinancialStatements()  
+data = FS.load('2330')# 讀取 2330 歷史財報
+data = FS.load_all()# 讀取 '所有股票' 歷史財報
+
+'''    
+        
+class FinancialStatements(LoadDate):
     def __init__(self):
-        super(StockInfo, self).__init__(
+        super(FinancialStatements, self).__init__(
                 database = 'Financial_DataSet',
                 data_name = 'FinancialStatements')
-        self.data_name = 'StockInfo'
         
-    def load(self):                        
+    def load_all(self):
+        
         self.get_col_name()
-        #---------------------------------------------------------------   
-        self.data = pd.DataFrame()
         self.data = self.get_data(all_data='T')
-                
+
         return self.data
-    
+        
 #--------------------------------------------------------------- 
-''' test
+''' test StockDividend
 SD = StockDividend()
 data = SD.load('2330')
+data.iloc[8]
 
 '''
 class StockDividend(LoadDate):
