@@ -226,6 +226,33 @@ class StockDividend(LoadDate):
                 database = 'Financial_DataSet',
                 data_name = 'StockDividend')
         #self.data_name = 'StockInfo'    
+        
+        
+#--------------------------------------------------------------- 
+''' test StockDividend
+II = InstitutionalInvestors()
+data = II.load()
+
+'''
+class InstitutionalInvestors(LoadDate):
+    def __init__(self):
+        super(InstitutionalInvestors, self).__init__(
+                database = 'Financial_DataSet',
+                data_name = 'InstitutionalInvestors')
+    def load(self):                        
+        self.get_col_name()
+        #---------------------------------------------------------------   
+        self.data = pd.DataFrame()
+        self.data = self.get_data(all_data='T')
+                
+        return self.data
+        
+        
+        
+        
+        
+
+        
  
 
 
