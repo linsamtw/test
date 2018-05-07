@@ -9,11 +9,11 @@
 
 ### 1.Financial Crawler
 #### 1.1 股票股價
-     1.1.1 Crawler history Taiwan stocks prices. (100%)
-     1.1.2 Auto crawler new taiwan stocks prices. (100%)
-     1.1.3 Load data example (100%)
-     1.1.4 三大法人(外資) 買賣歷史金額 (100%)
-     1.1.5 Auto crawler new taiwan stocks Institutional Investors buy and sell. ->>>
+     1.1.1 台股歷史股價 Crawler history Taiwan stocks prices. (100%)
+     1.1.2 自動更新台股股價 Auto crawler new taiwan stocks prices. (100%)
+     1.1.3 [讀取範例 Load data example](https://github.com/f496328mm/FinancialMining/blob/master/FinancialOpenData/load_data.py) (100%)
+     1.1.4 三大法人(外資) 歷史買賣 history taiwan stock Institutional Investors buy and sell (100%)
+     1.1.5 自動更新外資買賣 Auto crawler new taiwan stocks Institutional Investors buy and sell. ->>>
      1.1.6 S&P 500指數，並爬取該 500 家股票股價 ->>>
 #### 1.2 各國匯率 
      1.2.1 以美元為基準，對於未來其他金融 data ，較容易進行轉換。
@@ -26,8 +26,8 @@
      1.5.4 data from G7 central bank
      
 #### 1.6 財報
-     1.6.1 台股歷年財報 & 讀取範例 (100%) 
-     1.6.2 台股歷史配股 & 讀取範例 (100%)
+     1.6.1 台股歷年財報 & 讀取範例 history taiwan stock Financial Statements (100%) 
+     1.6.2 台股歷史配股 & 讀取範例 history taiwan stock Stock Dividend (100%)
      1.6.3 每個月自動爬取最新財報 ->>>
      1.6.4 每個月自動爬取最新配股 ->>>
 #### 1.7 other 
