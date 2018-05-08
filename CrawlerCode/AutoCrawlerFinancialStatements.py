@@ -114,13 +114,12 @@ class AutoCrawlerFinancialStatements(CrawlerFinancialStatements.CrawlerFinancial
             else:
                 tem = self.crawler()
                 self.stock_financial_statements = self.stock_financial_statements.append(tem)
-    
+        self.stock_financial_statements = self.stock_financial_statements.sort_values(['stock_id','year','quar'])
+        self.stock_financial_statements.index = range(len(self.stock_financial_statements))
+        
     def main(self):
         self.get_stock_id_set()
         self.crawler_new_data()
-
-        
-
 
 def main():
 
@@ -129,9 +128,17 @@ def main():
                                           password = password,
                                           database = 'Financial_DataSet')
     ACFS.main()
+    ACFS.main_fix()
+    ACFS.stock_financial_statements['year'] = ACFS.stock_financial_statements['year'] + 1911
 
+    if ACFS.stock_financial_statements.columns[0] == 0:
+        ACFS.stock_financial_statements = ACFS.stock_financial_statements.T
+        
     sql = CrawlerFinancialStatements.Crawler2SQL(host,user,password,ACFS.stock_financial_statements)
     sql.upload2sql(dataset_name = 'FinancialStatements',database = 'Financial_DataSet' )
+
+main()
+
 
 
 

@@ -38,7 +38,7 @@ import FinancialKey
 
 # url = 'https://stock.wearn.com/Income_detial.asp?kind=2317&y=10604'
 
-# self = Crawler2SQL(host,user,password,CFS.stock_financial_statements)
+# self = Crawler2SQL(host,user,password,self.stock_financial_statements)
 class Crawler2SQL:
 
     def __init__(self,host,user,password,stock_financial_statements):
@@ -51,13 +51,12 @@ class Crawler2SQL:
         
         conn = ( pymysql.connect(host = self.host,# SQL IP
                                  port = 3306,
-                                 user = self.user,# 帳號
-                                 password = self.password,# 密碼
-                                 database = database,  # 資料庫名稱
-                                 charset="utf8") )   #  編碼           
+                                 user = self.user,
+                                 password = self.password,
+                                 database = database,  
+                                 charset="utf8") )         
         c=conn.cursor()
-        c.execute( sql_string )# 建立新的 SQL file
-        # 加 PRIMARY KEY 
+        c.execute( sql_string )
         try:
             c.execute('ALTER TABLE `'+dataset_name+'` ADD id BIGINT(64) NOT NULL AUTO_INCREMENT PRIMARY KEY;')
             c.close() 
