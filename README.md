@@ -1,5 +1,6 @@
 ## Financial Mining Outline 
 ##### Financial Open Data ( Development )
+目前現有 data 如下
 1. 台股股票一般資訊 ( 代號、名稱、產業 ) <br>
 2. history taiwan stock prices ( 台股歷史股價 )<br>
 3. history taiwan stock Financial Statements ( 台股歷史財報 1997 ~ now )<br>
