@@ -12,12 +12,11 @@ import pandas as pd
 import pymysql
 os.chdir('/home/linsam/project/Financial_Crawler')
 sys.path.append('/home/linsam/project/Financial_Crawler')
-import CrawlerStockDividend
-import FinancialStatementsKey
+import FinancialKey
 
-host = FinancialStatementsKey.host
-user = FinancialStatementsKey.user
-password = FinancialStatementsKey.password
+host = FinancialKey.host
+user = FinancialKey.user
+password = FinancialKey.password
 
 class Crawler2SQL(CrawlerStockDividend.Crawler2SQL):    
 

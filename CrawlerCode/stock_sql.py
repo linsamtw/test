@@ -11,11 +11,11 @@ import pandas as pd
 import numpy as np
 os.chdir('/home/linsam/project/Financial_Crawler')
 sys.path.append('/home/linsam/project/Financial_Crawler')
-import FinancialStatementsKey
+import FinancialKey
 
-host = FinancialStatementsKey.host
-user = FinancialStatementsKey.user
-password = FinancialStatementsKey.password
+host = FinancialKey.host
+user = FinancialKey.user
+password = FinancialKey.password
 #----------------------------------------
 
 def creat_sql_file(sql_string,dataset_name):

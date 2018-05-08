@@ -34,7 +34,7 @@ import copy
 os.chdir('/home/linsam/project/Financial_Crawler')
 sys.path.append('/home/linsam/project/Financial_Crawler')
 import stock_sql
-import FinancialStatementsKey
+import FinancialKey
 
 # url = 'https://stock.wearn.com/Income_detial.asp?kind=2317&y=10604'
 
@@ -58,9 +58,13 @@ class Crawler2SQL:
         c=conn.cursor()
         c.execute( sql_string )# 建立新的 SQL file
         # 加 PRIMARY KEY 
-        c.execute('ALTER TABLE `'+dataset_name+'` ADD id BIGINT(64) NOT NULL AUTO_INCREMENT PRIMARY KEY;')
-        c.close() # 關閉與 SQL 的連接
-        conn.close()# 關閉與 SQL 的連接
+        try:
+            c.execute('ALTER TABLE `'+dataset_name+'` ADD id BIGINT(64) NOT NULL AUTO_INCREMENT PRIMARY KEY;')
+            c.close() 
+            conn.close()
+        except:
+            c.close() 
+            conn.close()            
     
     def create_table(self):
         dataset_name = 'FinancialStatements'
@@ -121,10 +125,9 @@ class Crawler2SQL:
 class CrawlerFinancialStatements:
     
     def __init__(self,stock_id_set):
-        #self.stock_name = []
-        #self.stock_id = []
+
         self.stock_id_set = stock_id_set
-        #self.driver = webdriver.Firefox()
+
 
     def create_url(self):
         
@@ -306,13 +309,16 @@ def main():
     CFS.crawler()
     CFS.main_fix()
 
-    host = FinancialStatementsKey.host
-    user = FinancialStatementsKey.user
-    password = FinancialStatementsKey.password
+    host = FinancialKey.host
+    user = FinancialKey.user
+    password = FinancialKey.password
     
     sql = Crawler2SQL(host,user,password,CFS.stock_financial_statements)
     #sql = Crawler2SQL(host,user,password,data)
-    sql.create_table()
+    try:
+        sql.create_table()
+    except:
+        123
     
     dataset_name = 'FinancialStatements'
     database = 'Financial_DataSet'
