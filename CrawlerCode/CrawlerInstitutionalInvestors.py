@@ -13,6 +13,7 @@ import pymysql
 os.chdir('/home/linsam/project/Financial_Crawler')
 sys.path.append('/home/linsam/project/Financial_Crawler')
 import FinancialKey
+import CrawlerStockDividend
 
 host = FinancialKey.host
 user = FinancialKey.user

@@ -6,11 +6,13 @@ import os, sys
 from bs4 import BeautifulSoup
 import re
 import pandas as pd
+import datetime
 os.chdir('/home/linsam/project/Financial_Crawler')
 sys.path.append('/home/linsam/project/Financial_Crawler')
 import FinancialKey
 import load_data
 import CrawlerFinancialStatements
+import stock_sql
 
 host = FinancialKey.host
 user = FinancialKey.user
@@ -122,6 +124,7 @@ class AutoCrawlerFinancialStatements(CrawlerFinancialStatements.CrawlerFinancial
         if len(self.stock_financial_statements) > 0:
             self.stock_financial_statements = self.stock_financial_statements.sort_values(['stock_id','year','quar'])
             self.stock_financial_statements.index = range(len(self.stock_financial_statements))
+            self.stock_financial_statements['year'] = self.stock_financial_statements['year'] + 1911
             
     def main(self):
         self.get_stock_id_set()
@@ -140,13 +143,25 @@ def main():
             ACFS.fix()
         except:
             123
-        ACFS.stock_financial_statements['year'] = ACFS.stock_financial_statements['year'] + 1911
-        
+            
         if ACFS.stock_financial_statements.columns[0] == 0:
             ACFS.stock_financial_statements = ACFS.stock_financial_statements.T
             
         sql = CrawlerFinancialStatements.Crawler2SQL(host,user,password,ACFS.stock_financial_statements)
         sql.upload2sql(dataset_name = 'FinancialStatements',database = 'Financial_DataSet' )
+
+    #------------------------------------------------------
+    '''
+    sql_string = 'create table FinancialStatements ( name text(100),FSdate datetime)'
+    FinancialKey.creat_datatable(host,user,password,'python',sql_string,'FinancialStatements')
+    '''
+    text = 'insert into FinancialStatements (name,FSdate) values(%s,%s)'
+    tem = str( datetime.datetime.now() )
+    time = re.split('\.',tem)[0]
+    value = ('FinancialStatements',time)
+
+    stock_sql.Update2Sql(host,user,password,
+                         'python',text,value)     
     
 main()
 

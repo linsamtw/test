@@ -1,10 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Apr 25 09:56:18 2018
 
-@author: linsam
-"""
 
 from pandas_datareader import data as pdr
 import os,sys
@@ -16,6 +10,7 @@ import pymysql
 os.chdir('/home/linsam/project/Financial_Crawler')
 sys.path.append('/home/linsam/project/Financial_Crawler')
 import FinancialKey
+import stock_sql
 
 host = FinancialKey.host
 user = FinancialKey.user
@@ -37,28 +32,6 @@ def execute_sql2(host,user,password,database,sql_text):
     conn.close()
 
     return data
-
-def Record():
-    today = datetime.datetime.now().strftime("%Y-%m-%d")
-    
-    conn = ( pymysql.connect(host = host,
-                     port = 3306,
-                     user = user,
-                     password = password,
-                     database='python', 
-                     charset="utf8") )   
-    
-    cursor = conn.cursor() 
-    tem = str( datetime.datetime.now() )
-    time = re.split('\.',tem)[0]
-    #---------------------------------------------------------------------------        
-    ( cursor.execute('insert into '+ 'StockPriceProcess'  +
-                    '(name,stockdate,time)'+ ' values(%s,%s,%s)', 
-              ('StockPrice',str(today),time) ) )
-
-    conn.commit()
-    cursor.close()
-    conn.close()  
     
 def take_stock_id_by_sql():
     #---------------------------------------------------------------                         
@@ -67,26 +40,21 @@ def take_stock_id_by_sql():
         user = user,
         password = password,
         database = 'StockPrice',
-        sql_text = 'SHOW TABLES')
-
-    #---------------------------------------------------------------                         
-    stock_id = []
-    stock_cid = []
-    for d in tem:
-        d = d[0][1:]
-        d = d.replace('_','.')
-        stock_id.append( d )
-        stock_cid.append( d.split('.')[0] )
-
+        sql_text = 'SHOW TABLES')                      
+    stock_cid = [ d[0][1:].replace('_','.').split('.')[0] for d in tem ]
+    stock_id = [ d[0][1:].replace('_','.') for d in tem ]
+    
     stock_id = pd.DataFrame({'stock_id' : stock_id,
-                             'stock_cid' : stock_cid})
+                             'stock_cid' : stock_cid})    
+    
     return stock_id
     
 class crawler_new_stock_price:
     def __init__(self,stock,stock_id):
+        yf.pdr_override()
         self.stock = str( stock )
         self.stock_id = stock_id
-        
+          
     def get_start_and_today(self):
         #stock = '2330'
         try:
@@ -209,7 +177,7 @@ def save_new_craw_process(stock):
     conn.close()  
     
 def main():      
-
+    # FinancialKey.creat_StockPriceProcess_file()
     yf.pdr_override()
     stock_id = take_stock_id_by_sql()
     #-----------------------------------------------    
@@ -221,7 +189,17 @@ def main():
         save_new_craw_process(stock)
         i=i+1
         # stock='0053'
-    Record()
+    
+    #------------------------------------------------------
+    text = 'insert into StockPriceProcess (name,stockdate,time) values(%s,%s,%s)'
+    today = str( datetime.datetime.now().strftime("%Y-%m-%d") )
+    tem = str( datetime.datetime.now() )
+    time = re.split('\.',tem)[0]
+    value = ('StockPrice',today,time)
+
+    stock_sql.Update2Sql(host,user,password,
+                         'python',text,value)        
+
 #----------------------------------------------------------
     
 

@@ -182,6 +182,24 @@ def execute_sql2(host,user,password,database,sql_text):
 
     return data
 
+def Update2Sql(host,user,password,database,text,value):
+    #today = datetime.datetime.now().strftime("%Y-%m-%d")
+    
+    conn = ( pymysql.connect(host = host,
+                     port = 3306,
+                     user = user,
+                     password = password,
+                     database = database, 
+                     charset="utf8") )   
+    
+    cursor = conn.cursor() 
+
+    #---------------------------------------------------------------------------        
+    cursor.execute(text,value )
+
+    conn.commit()
+    cursor.close()
+    conn.close()  
 '''def change_stock_id(stock,stock_id = take_stock_id_by_sql()):
     try:
         tem = stock_id[ stock_id['stock_cid'] == str(stock)].stock_id
