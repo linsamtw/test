@@ -127,7 +127,6 @@ class CrawlerFinancialStatements:
 
         self.stock_id_set = stock_id_set
 
-
     def create_url(self):
         
         url = []
@@ -136,9 +135,9 @@ class CrawlerFinancialStatements:
             index_url = 'https://stock.wearn.com/income.asp?kind='
             index_url = index_url + self.stock_id_set[j]
             
-            res = requests.get(index_url,verify = True)  # 擷取該網站 原始碼         
+            res = requests.get(index_url,verify = True)        
             res.encoding = 'big5'
-            soup = BeautifulSoup(res.text, "lxml")# beautiful 漂亮的呈現原始碼
+            soup = BeautifulSoup(res.text, "lxml")
             tem = soup.find_all('a') 
             
             for i in range(len(tem)):
@@ -227,9 +226,21 @@ class CrawlerFinancialStatements:
         self.stock_financial_statements = stock_financial_statements
         # CFS.stock_financial_statements = stock_financial_statements
     #------------------------------------------------------------------------------
-    def fix(self,k):
-
-        col_name = ['REV','COST','PRO','GM','OE','OI','OPR','NNOI','BTAX','TAX','NI','NPM','EPS']        
+    def fix(self):
+        def find_error_index(data,error_col,j):
+            error_index = []
+            for i in range(len(data)):
+                #print(i)
+                try:
+                    float(data[error_col[j]][i])
+                    #fix_data = fix_data.append(self.stock_financial_statements.iloc[i])
+                except:
+                    error_index.append(i)
+            return error_index
+        #---------------------------------------------------------------------
+                        
+        col_name = list( self.stock_financial_statements.columns    )
+        [col_name.remove(x) for x in ['stock_id','year','quar','url'] ]
         error_col = []
         for i in range(len(col_name)):
             try:
@@ -239,63 +250,29 @@ class CrawlerFinancialStatements:
                 error_col.append(col_name[i])
         
         error_index = []
-        for j in range(len(error_col)):
-            for i in range(len(self.stock_financial_statements)):
-                try:
-                    float(self.stock_financial_statements[error_col[j]][i])
-                except:
-                    error_index.append(i)
-        error_index = list( set(error_index) & set(error_index) )
-        print(len(error_index))
+        for i in range(len(error_col)):
+            print(i)
+            tem = find_error_index(self.stock_financial_statements,error_col,i)
+            error_index.append(set(tem))
 
-        fix_data = copy.deepcopy(self.stock_financial_statements)
-        error_amount = 0
-        for i in error_index:# 
-            #print(i)
-            url = self.stock_financial_statements['url'][i]
-            #time.sleep(0.5)
-            #print(url)
-            stock_value,bo = self.take_stock_value(url)
-            if bo == 0 and k==0:
-                print('error')
-                error_amount = error_amount+1
-                #stock_value = pd.DataFrame([ '' for i in range(len(stock_value.iloc[0])) ])
-            elif bo == 0 and k == 1:
-                stock_value = pd.DataFrame([ -1 for i in range(13) ])
-                stock_value = stock_value.T
-                stock_value.columns = col_name
-                
-                stock_value['stock_id'] = self.take_sotck_id(url)
-                stock_value['year'],stock_value['quar'] = self.take_year_and_quar(url)
-                stock_value['url'] = url
-                fix_data.iloc[i] = stock_value.iloc[0]
-                
-            elif bo == 1:
-                stock_value['stock_id'] = self.take_sotck_id(url)
-                stock_value['year'],stock_value['quar'] = self.take_year_and_quar(url)
-                stock_value['url'] = url
-                fix_data.iloc[i] = stock_value.iloc[0]
-                # stock_financial_statements.iloc[i]
-        self.stock_financial_statements = fix_data
-        del fix_data
-        #self.error_amount = error_amount
-        return error_amount
-        
-    def main_fix(self):
-        
-        for k in range(5):
-            error_amount = self.fix(k)
-            print('k = ' + str(k))
-            if error_amount == 0:
-                break
-            if k == 0:
-                self.error_amount = error_amount
-            if k > 0:
-                print(self.error_amount)
-                if error_amount == self.error_amount:
-                    break
-                else:
-                    self.error_amount = error_amount
+    
+        for i in range(len(error_index)):
+            if i == 0 :
+                error = set( error_index[0] & error_index[1] )
+            else:
+                error = set( error & error_index[i] )
+        if len(error) != 0:
+            error = list(error)
+
+            fix_data = self.stock_financial_statements.drop(
+                    self.stock_financial_statements.index[error])
+    
+            for i in range(len(col_name)):
+                fix_data[col_name[i]] = np.float32(fix_data[col_name[i]])
+    
+            fix_data.index = range(len(fix_data))
+            self.stock_financial_statements = fix_data
+            del fix_data
         
 # https://www.cnyes.com/twstock/financial11.aspx?pi=2&mtype=T&stype=24&year=2016
 
@@ -306,7 +283,8 @@ def main():
     
     CFS = CrawlerFinancialStatements(stock_id_set)
     CFS.crawler()
-    CFS.main_fix()
+    CFS.fix()
+    CFS.stock_financial_statements['year'] = CFS.stock_financial_statements['year'] + 1911
 
     host = FinancialKey.host
     user = FinancialKey.user

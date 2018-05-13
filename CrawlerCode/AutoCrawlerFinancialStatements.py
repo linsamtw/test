@@ -6,9 +6,6 @@ import os, sys
 from bs4 import BeautifulSoup
 import re
 import pandas as pd
-import numpy as np
-import pymysql
-import copy
 os.chdir('/home/linsam/project/Financial_Crawler')
 sys.path.append('/home/linsam/project/Financial_Crawler')
 import FinancialKey
@@ -19,7 +16,7 @@ host = FinancialKey.host
 user = FinancialKey.user
 password = FinancialKey.password
 
-
+# self = AutoCrawlerFinancialStatements(host = host,user = user,password = password,database = 'Financial_DataSet')
 
 class AutoCrawlerFinancialStatements(CrawlerFinancialStatements.CrawlerFinancialStatements):
     def __init__(self,host,user,password,database):
@@ -42,25 +39,33 @@ class AutoCrawlerFinancialStatements(CrawlerFinancialStatements.CrawlerFinancial
     def get_yearquar(self,stock):
         #stock = stock_id_set[i]
         
-        sql_text = "SELECT year,quar FROM FinancialStatements  WHERE stock_id = '"
-        sql_text = sql_text + stock + "' and id=( SELECT max(id) FROM FinancialStatements WHERE stock_id = '"
-        sql_text = sql_text + stock +"' )"
-    
+        #sql_text = "SELECT year,quar FROM FinancialStatements  WHERE stock_id = '"
+        #sql_text = sql_text + stock + "' and id=( SELECT max(id) FROM FinancialStatements WHERE stock_id = '"
+        #sql_text = sql_text + stock +"' )"
+        
+        sql_text = "SELECT year,quar FROM FinancialStatements  WHERE stock_id = "
+        sql_text = sql_text + stock 
+        
         tem =  load_data.execute_sql2(
                 host = self.host,
                 user = self.user,
                 password = self.password,
                 database = self.database,
                 sql_text = sql_text)
-        year = tem[0][0] - 1911
-        quar = tem[0][1]
+        year,quar = [],[]
+        for te in tem:
+            year.append(te[0]-1911)
+            quar.append(te[1])
+            
+        #year = tem[0][0] - 1911
+        #quar = tem[0][1]
         return year,quar
 
     def crawler(self):
 
         stock_financial_statements = pd.DataFrame()        
         for i in range(len(self.url)) :# 
-            #print(str(i)+'/'+str(len(self.url)))
+            print(str(i)+'/'+str(len(self.url)))
             url = self.url[i]
             stock_value,bo = self.take_stock_value(url)
             if bo == 0:
@@ -71,9 +76,9 @@ class AutoCrawlerFinancialStatements(CrawlerFinancialStatements.CrawlerFinancial
                 stock_value['year'],stock_value['quar'] = self.take_year_and_quar(url)
                 stock_value['url'] = url
                 stock_financial_statements = stock_financial_statements.append(stock_value)
-
-        stock_financial_statements = stock_financial_statements.sort_values(['stock_id','year','quar'])
-        stock_financial_statements.index = range(len(stock_financial_statements))
+        if len(stock_financial_statements) > 0:
+            stock_financial_statements = stock_financial_statements.sort_values(['stock_id','year','quar'])
+            stock_financial_statements.index = range(len(stock_financial_statements))
         #self.stock_financial_statements = stock_financial_statements
         return stock_financial_statements
 
@@ -82,13 +87,12 @@ class AutoCrawlerFinancialStatements(CrawlerFinancialStatements.CrawlerFinancial
             url = []
             for i in range(len(tem)):
                 if 'Income_detial.asp' in str(tem[i]):
-                    #print(tem[i].text)
-                    
+                    #print(i)
                     x = tem[i].text
                     y = int( re.search('[0-9]+年',x).group(0).replace('年','') )
                     q = int( re.search('[0-9]+季',x).group(0).replace('季','') )
-                    da = y+q
-                    if da > date:
+                    da = y*10 + q
+                    if da not in date:
                         url.append( 'https://stock.wearn.com/' + tem[i]['href'] )    
             return url
         #------------------------------------------------------------------------------
@@ -98,14 +102,15 @@ class AutoCrawlerFinancialStatements(CrawlerFinancialStatements.CrawlerFinancial
             print(str(i)+'/'+str(len(self.stock_id_set)))
             stock = self.stock_id_set[i]
             year,quar = self.get_yearquar(stock)
-            date = year + quar
+            date = [year[i]*10 + quar[i] for i in range(len(year)) ]
             
             index_url = 'https://stock.wearn.com/income.asp?kind='
             index_url = index_url + stock
             
-            res = requests.get(index_url,verify = True)  # 擷取該網站 原始碼         
+            #res = requests.get(index_url,verify = True)          
+            res = requests.post(index_url,verify = True)  
             res.encoding = 'big5'
-            soup = BeautifulSoup(res.text, "lxml")# beautiful 漂亮的呈現原始碼
+            soup = BeautifulSoup(res.text, "lxml")#
             tem = soup.find_all('a') 
             
             self.url = get_new_url(tem,date)
@@ -114,9 +119,10 @@ class AutoCrawlerFinancialStatements(CrawlerFinancialStatements.CrawlerFinancial
             else:
                 tem = self.crawler()
                 self.stock_financial_statements = self.stock_financial_statements.append(tem)
-        self.stock_financial_statements = self.stock_financial_statements.sort_values(['stock_id','year','quar'])
-        self.stock_financial_statements.index = range(len(self.stock_financial_statements))
-        
+        if len(self.stock_financial_statements) > 0:
+            self.stock_financial_statements = self.stock_financial_statements.sort_values(['stock_id','year','quar'])
+            self.stock_financial_statements.index = range(len(self.stock_financial_statements))
+            
     def main(self):
         self.get_stock_id_set()
         self.crawler_new_data()
@@ -127,16 +133,21 @@ def main():
                                           user = user,
                                           password = password,
                                           database = 'Financial_DataSet')
+    # self = ACFS
     ACFS.main()
-    ACFS.main_fix()
-    ACFS.stock_financial_statements['year'] = ACFS.stock_financial_statements['year'] + 1911
-
-    if ACFS.stock_financial_statements.columns[0] == 0:
-        ACFS.stock_financial_statements = ACFS.stock_financial_statements.T
+    if len(ACFS.stock_financial_statements) != 0 :    
+        try:
+            ACFS.fix()
+        except:
+            123
+        ACFS.stock_financial_statements['year'] = ACFS.stock_financial_statements['year'] + 1911
         
-    sql = CrawlerFinancialStatements.Crawler2SQL(host,user,password,ACFS.stock_financial_statements)
-    sql.upload2sql(dataset_name = 'FinancialStatements',database = 'Financial_DataSet' )
-
+        if ACFS.stock_financial_statements.columns[0] == 0:
+            ACFS.stock_financial_statements = ACFS.stock_financial_statements.T
+            
+        sql = CrawlerFinancialStatements.Crawler2SQL(host,user,password,ACFS.stock_financial_statements)
+        sql.upload2sql(dataset_name = 'FinancialStatements',database = 'Financial_DataSet' )
+    
 main()
 
 
