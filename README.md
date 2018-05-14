@@ -35,7 +35,7 @@
 #### 1.6 財報
      1.6.1 台股歷年財報 history taiwan stock Financial Statements (100%) 
      1.6.2 台股歷史配股 history taiwan stock Stock Dividend (100%)
-     1.6.3 每個月自動爬取最新財報 ->>>
+     1.6.3 每日自動爬取最新財報 (100%)
      1.6.4 每個月自動爬取最新配股 ->>>
 #### 1.7 other 
      1.7.1 Output Gap (產出缺口)
