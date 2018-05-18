@@ -1,11 +1,7 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Fri May  4 21:19:58 2018
 
-@author: root
-"""
-
+'''
+台股歷史配股
+'''
 # https://stock.wearn.com/dividend.asp?kind=2317
 
 import requests
@@ -14,17 +10,13 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import numpy as np
 import pymysql
+import re
 os.chdir('/home/linsam/project/Financial_Crawler')
 sys.path.append('/home/linsam/project/Financial_Crawler')
 import stock_sql
-import FinancialKey
-
-host = FinancialKey.host
-user = FinancialKey.user
-password = FinancialKey.password
-#------------------------------------------------------------
-
-
+from FinancialKey import host,user,password
+import load_data
+#-----------------------------------------------------------------
 # 股東會日期 Shareholders meeting date
 # 盈餘配股(元/股)	 Retained_Earnings 公積配股(元/股) Capital_Reserve
 # 除權交易日 Ex_right_trading_day
@@ -34,7 +26,26 @@ password = FinancialKey.password
 # 員工紅利(總金額)(仟元) total employee bonus shares 
 # 董監酬勞 (仟元) Directors remuneration
 
+def UPDATE_sql(host,user,password,database,sql_text):
+    # text = sql_text
+    conn = ( pymysql.connect(host = host,# SQL IP
+                     port = 3306,
+                     user = user,# 帳號
+                     password = password,# 密碼
+                     database = database,  # 資料庫名稱
+                     charset="utf8") )   #  編碼
+                             
+    cursor = conn.cursor()    
 
+    try:   
+        for i in range(len(sql_text)):
+            cursor.execute(sql_text[i])
+        conn.commit()
+        conn.close()
+        return 1
+    except:
+        conn.close()
+        return 0
 
 class Crawler2SQL:
     
@@ -104,7 +115,7 @@ class Crawler2SQL:
                 else:
                     value.append( float( tem ) )
             return value
-
+        
         data.meeting_data = datechabge( data.meeting_data )
         data.Ex_right_trading_day = datechabge( data.Ex_right_trading_day )
         data.Ex_dividend_transaction_day = datechabge( data.Ex_dividend_transaction_day )
@@ -223,9 +234,109 @@ class CrawlerStockDividend:
     
     def main(self):
         self.create_url_set()
+#-----------------------------------------------------------------------------
+'''
+self = AutoCrawlerStockDividend(host,user,password)
 
+'''
+class AutoCrawlerStockDividend(CrawlerStockDividend):
+    def __init__(self,host,user,password):
+        self.host = host
+        self.user = user
+        self.password = password
+        self.database = 'Financial_DataSet'
+        
+    def create_url_set(self):
+        sql_text = "SELECT DISTINCT `stock_id` FROM `StockDividend` "
+        tem = load_data.execute_sql2(
+                self.host,self.user,self.password,self.database,sql_text)
+        
+        self.stock_id_set = [te[0] for te in tem]
+        
+        self.url_set = []
+        for j in range(len(self.stock_id_set)):
+            #print(str(j)+'/'+str(len(self.stock_id_set)))
+            index_url = 'https://stock.wearn.com/dividend.asp?kind='
+            index_url = index_url + self.stock_id_set[j]
+            self.url_set.append(index_url) 
+            
+    def get_data_id(self):
+        #old_date = old_data['meeting_data']
+        # sql_text = []
+        sql_text = "SELECT id FROM `StockDividend` WHERE `meeting_data` = '"
+        sql_text = sql_text + str(self.new_date.date()) + "' AND `stock_id` LIKE "
+        sql_text = sql_text + self.new_data['stock_id'] 
+        #sql_text.append()
+        self.data_id = load_data.execute_sql2(self.host,self.user,self.password,self.database,sql_text)[0][0]     
+        #return text
+    def change_sql_data(self,col):# col = change_name[0]
+        if str( self.new_data[col] ) == 'NaT':
+            return ''
+        else:
+            tem = str( self.new_data[col] )
+            if 'day' in col:
+                tem = re.search('[0-9]+-[0-9]+-[0-9]+',tem).group(0)
+                
+            text = " UPDATE `StockDividend`" + " SET `"  + col + "` = "
+            text = text + " " + tem  + " "
+            text = text + "   WHERE `id` = " + str(self.data_id) +"; "
+            #UPDATE `StockDividend` SET `Retained_Earnings` = '1' WHERE `StockDividend`.`id` = 1;
+            #UPDATE_sql(self.host,self.user,self.password,self.database,sql_text)
+            return text        
+    def get_new(self):
+        # stock = CTD.stock_id_set[0]
+        
+        #data_name = 'StockDividend'
+        #sql_text = "SELECT * FROM `StockDividend` WHERE `stock_id` = " + stock
+        #sql_text = sql_text + " AND `meeting_data`=( SELECT max(`meeting_data`) "
+        #sql_text = sql_text + "FROM `StockDividend` WHERE `stock_id` = "+ stock
+        #sql_text = sql_text + " )"
+        #old_data = load_data.execute_sql2(host,user,password,database,sql_text)
+        SD = load_data.StockDividend()
+        self.old_data = SD.load(self.stock).iloc[0]
+        self.old_date = self.old_data['meeting_data']
+        self.new_date = self.new_data['meeting_data']
+        
+        change_name = list( self.new_data.index )
+        self.sql_text = []
+        
+        if self.old_date == self.new_date.date():
+            [ change_name.remove(col) for col in ['meeting_data','stock_id'] ]
+            self.get_data_id()
+            for col in change_name:
+                tem = self.change_sql_data(col)
+                if tem != '':
+                    self.sql_text.append( tem )
+        elif self.old_date < self.new_date.date():
+            # add new data
+            data = pd.DataFrame(self.new_data)
+            data = data.T
+            C2S = Crawler2SQL(self.host,self.user,self.password,'StockDividend','Financial_DataSet')
+            C2S.upload2sql(data)
+ 
+    def main(self):
+        CTD = CrawlerStockDividend()
+        CTD.main()
+        C2S = Crawler2SQL(self.host,self.user,self.password,'StockDividend','Financial_DataSet')
+        try:
+            C2S.create_table()
+        except:
+            123
+        self.create_url_set()
+        for i in range(len(self.url_set)):
+            print(str(i)+'/'+str(len(self.url_set)))# i=0
+            self.new_data = self.get_value(i).iloc[0]
+            self.stock = self.stock_id_set[i]
+            self.get_new() 
+            UPDATE_sql(self.host,self.user,self.password,
+                       self.database,self.sql_text)
+            
+            #C2S.upload2sql(data)            
+#-----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
-def main():
+        
+def crawler_history():
     CTD = CrawlerStockDividend()
     CTD.main()
     C2S = Crawler2SQL(host,user,password,'StockDividend','Financial_DataSet')
@@ -238,9 +349,22 @@ def main():
         print(str(i)+'/'+str(len(CTD.url_set)))#i=0
         data = CTD.get_value(i)
         C2S.upload2sql(data)
+        
+def auto_crawler_new():
 
-main()
+    ACSD = AutoCrawlerStockDividend(host,user,password)
+    ACSD.main()
 
+def main(x):
+    if x == 'history':
+        crawler_history()
+    elif x == 'new':
+        # python3 /home/linsam/project/Financial_Crawler/CrawlerFinancialStatements.py new
+        auto_crawler_new()
+    
+if __name__ == '__main__':
+    x = sys.argv[1]# cmd : input new or history
+    main(x)
 
 
 
