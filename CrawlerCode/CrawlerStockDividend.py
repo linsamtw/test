@@ -197,7 +197,7 @@ class CrawlerStockDividend:
                     
             return new_date
             
-        # index_url = 'https://stock.wearn.com/dividend.asp?kind=2330'
+        # index_url = 'https://stock.wearn.com/dividend.asp?kind=1101'
         index_url = self.url_set[k]# self = CTD
         
         res = requests.get(index_url,verify = True)        
@@ -293,12 +293,15 @@ class AutoCrawlerStockDividend(CrawlerStockDividend):
         #sql_text = sql_text + " )"
         #old_data = load_data.execute_sql2(host,user,password,database,sql_text)
         SD = load_data.StockDividend()
-        self.old_data = SD.load(self.stock).iloc[0]
+        old_data = SD.load(self.stock)
+        old_data = old_data.sort_values('meeting_data')
+
+        self.old_data = old_data.iloc[len(old_data)-1]
         self.old_date = self.old_data['meeting_data']
         self.new_date = self.new_data['meeting_data']
         
         change_name = list( self.new_data.index )
-        self.sql_text = []
+        sql_text = []
         
         if self.old_date == self.new_date.date():
             [ change_name.remove(col) for col in ['meeting_data','stock_id'] ]
@@ -306,7 +309,11 @@ class AutoCrawlerStockDividend(CrawlerStockDividend):
             for col in change_name:
                 tem = self.change_sql_data(col)
                 if tem != '':
-                    self.sql_text.append( tem )
+                    sql_text.append( tem )
+                    
+            UPDATE_sql(self.host,self.user,self.password,
+                       self.database,sql_text)
+                    
         elif self.old_date < self.new_date.date():
             # add new data
             data = pd.DataFrame(self.new_data)
@@ -328,8 +335,7 @@ class AutoCrawlerStockDividend(CrawlerStockDividend):
             self.new_data = self.get_value(i).iloc[0]
             self.stock = self.stock_id_set[i]
             self.get_new() 
-            UPDATE_sql(self.host,self.user,self.password,
-                       self.database,self.sql_text)
+            
             
             #C2S.upload2sql(data)            
 #-----------------------------------------------------------------------------
@@ -365,9 +371,6 @@ def main(x):
 if __name__ == '__main__':
     x = sys.argv[1]# cmd : input new or history
     main(x)
-
-
-
 
 
 
