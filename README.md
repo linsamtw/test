@@ -20,7 +20,7 @@
      1.1.2 自動更新台股股價 Auto crawler new taiwan stocks prices. (100%)
      1.1.3 讀取範例 Load data example (100%)
      1.1.4 三大法人(外資) 歷史買賣 history taiwan stock Institutional Investors buy and sell (100%)
-     1.1.5 自動更新外資買賣 Auto crawler new taiwan stocks Institutional Investors buy and sell. ->>>
+     1.1.5 自動更新外資買賣 Auto crawler new taiwan stocks Institutional Investors buy and sell. (100%)
      1.1.6 S&P 500指數，並爬取該 500 家股票股價 ->>>
 #### 1.2 各國匯率 
      1.2.1 以美元為基準，對於未來其他金融 data ，較容易進行轉換。
