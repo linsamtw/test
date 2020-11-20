@@ -26,4 +26,6 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
+        env:
+          TAG: ${{GITHUB_REF#refs/*/}}
         run: python test.py
