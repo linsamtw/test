@@ -1,0 +1,8 @@
+.idea/
+bin/
+obj/
+*.nupkg
+.vs/
+./pytest_cache
+Folder*
+*sln.DotSettings*

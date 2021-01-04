@@ -2,18 +2,19 @@
 
 name: CI
 
-on:
+on: 
   push:
     tags:
       - "*"
-  workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    name: Dotnet Side by Side testing sample
     steps:
-      - uses: actions/checkout@v2
-      - name: Run a one-line script
-        run: echo $MY_ENV
-        env: 
-          MY_ENV: ${{ secrets.MY_ENV }}
+    - uses: actions/checkout@v2
+    - run: dotnet restore; dotnet build --configuration Release --no-restore
+    - name: create config from env
+      run: cd test; dotnet run genenv.cs; cat config.xml;
+      env:
+        MY_ENV: ${{ secrets.MY_ENV }}
+
